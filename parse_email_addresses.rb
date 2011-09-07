@@ -6,18 +6,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'thin'
 
-#configure do
-#   Mongoid.configure do |config|
-#    name = "parse_emails"
-#    host = "localhost"
-#    config.database = Mongo::Connection.new.db(name)
-#  end
-#end
-
 Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
-#Mongoid.configure do |config|
-#  config.master = Mongo::Connection.new.db("parse_emails")
-#end
 
 #@url_array = ["http://www.jcsana.org/", 
 #	"http://www.dorot.org/dfi",
@@ -37,28 +26,34 @@ class Site
   include Mongoid::Document
   embeds_many :pages
   field :url
-  def self.get_url_list(url_array)
-  url_array.each do |url|
-    site = Site.new(:url => url)
-    Anemone.crawl(url) do |anemone|
-      anemone.on_every_page do |page|
-        page_title = page.doc.at_css('title').inner_html rescue nil
-        unless page_title == "Board & Staff"#TODO matches "contact" "board" "staff" "faculty"
-          page_title = nil
+  def self.get_pages(url_array)
+    url = url_array #url_array.each do |url|
+      site = Site.new(:url => url)
+      Anemone.crawl(url) do |anemone|
+        anemone.on_every_page do |page|
+        if page.html?
+          page_title = page.doc.at('title').inner_html rescue nil
+          puts page_title
+          unless page_title == "Board &amp; Staff"#TODO matches "contact" "board" "staff" "faculty
+            page_title = nil
+          end
+
+          #page.doc.xpath('//*[starts-with(*, "President")]').each do |node|
+          #  contacts = node.parent.text
+          #end
+
+          if page_title
+            site.pages << Page.new(url: page.url.to_s, page_title: page_title )
+            puts site.pages.each { |p| puts "found url => \"#{p.url.to_s}\"";
+                                     puts "found title => \"#{page_title}\"";}
+          end
+
+          anemone.after_crawl { site.save }
         end
-        #page.doc.xpath('//*[starts-with(*, "President")]').each do |node|
-        #  contacts = node.parent.text
-        #end
-        if page_title
-          site.pages << Page.new(url: page.url.to_s, page_title: page_title )
         end
-        puts site.pages.each { |p| puts "found url => \"#{p.url}\"";
-                                   puts "found title => \"#{p.title}\"";
-                                   puts "found contacts => \"#{p.contacts}\""; }
       end
-    end
-    site.save
-  end 
+    #end 
+  end
  # def self.search_text
  #   node.xpath('.//title[regex(., "\w+")]', Class.new {
  #     def regex node_set, regex
@@ -66,7 +61,6 @@ class Site
  #     end
  #   }.new)
  # end
-end
 
 end
 
