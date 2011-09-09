@@ -4,3 +4,8 @@
   %br
   - if SiteGroup.last
     = SiteGroup.last.urls
+%div.site_group
+  %form
+    %p What sites do you want to take a look in?
+    %textarea{ :rows => "10", :cols => "20", :name => "urls"}
+    %input{:type => "submit", :value => "Send em into the machine"}

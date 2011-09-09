@@ -53,7 +53,7 @@ class Contact
   field :content_snippet
 end
 
-def test(urls)
+def get_titles(urls)
   page_search_array = []
   search_field_input = "board staff", "contact us", "about us", "faculty", "directory", "directory:"
   page_search_array << search_field_input.join(" ").split
@@ -61,7 +61,7 @@ def test(urls)
 
   site_group = SiteGroup.new(:urls => urls)
   puts "created #{site_group.urls}"
-  Anemone.crawl(urls, :discard_page_bodies => true) do |anemone|
+  Anemone.crawl(urls, :discard_page_bodies => true, :dept_limit => 4) do |anemone|
     anemone.storage = Anemone::Storage.MongoDB
     anemone.on_every_page do |page|
       page_title = page.doc.at('title').inner_html.chomp.downcase rescue nil 
@@ -92,7 +92,24 @@ end
  #   }.new)
  # end
 
+#new
 get '/' do
   haml :index
+end
+
+#create
+post '/' do
+  @site_group = get_titles(params[:urls]) 
+  if @SiteGroup.save
+    redirect "/#{@site_group.id.to_s}"
+  else
+    redirect '/'
+  end
+end
+
+#show
+get '/:id' do
+  @site_group = SiteGroup.find(params[:id])
+  haml :show
 end
 
