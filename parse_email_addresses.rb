@@ -9,7 +9,7 @@ require 'thin'
 #templating
 require 'haml'
 
-if production? do
+configure :production do
   uri  = URI.parse(ENV['MONGOLAB_URI'])
   Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
 end
