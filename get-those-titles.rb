@@ -14,8 +14,9 @@ configure :production do
   Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
 end
 
+configure :development do
 Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
-
+end
 
 @urls = ["http://www.jcsana.org/", 
 	"http://www.dorot.org/dfi",

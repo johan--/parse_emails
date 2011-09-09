@@ -15,7 +15,7 @@ configure :production do
 end
 
 configure :development do
-  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+  Mongoid.database.development = Mongo::Connection.new('localhost','27017').db('parse_emails')
 end
 
 @urls = ["http://www.jcsana.org/", 
