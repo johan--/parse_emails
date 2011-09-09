@@ -1,2 +1,2 @@
-require 'parse_email_addresses' #needed './' to work with my ruby path...
+require './get-those-titles' 
 run Sinatra::Application
