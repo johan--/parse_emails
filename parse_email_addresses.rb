@@ -9,6 +9,11 @@ require 'thin'
 #templating
 require 'haml'
 
+if production? do
+  uri  = URI.parse(ENV['MONGOLAB_URI'])
+  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
+end
+
 Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 
 
