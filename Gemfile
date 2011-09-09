@@ -7,10 +7,13 @@ gem 'mongo'
 gem 'sinatra'
 gem 'thin'
 
+gem 'haml'
+
 group :development do
   gem "sinatra-reloader"
   gem "wirble"
   gem "awesome_print", :require => "ap"
   gem "interactive_editor"
   gem "pry"
+  gem "heroku"
 end

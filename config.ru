@@ -1,0 +1,3 @@
+require './parse_email_addresses' #needed './' to work with my ruby path...
+
+run Sinatra::Application
