@@ -17,23 +17,46 @@ end
 configure :development do
 Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 end
-
-@urls = ["http://www.jcsana.org/", 
-	"http://www.dorot.org/dfi",
-	 "http://www.jewish-studies.com/Jewish_Studies_at_Universities/USA/",
-	"http://www.teachforamerica.org/",
-	"http://blogs.rj.org/reform/",
-	"http://www.natanet.org/",
-	"http://www.jewishcamp.org/",
-	"http://www.americorps.gov/"
-	]
 	 
 class SiteGroup
   include Mongoid::Document
   embeds_many :pages
   field :urls
   field :name
-  
+
+  def self.get_titles( urls, search = "board\r\ncontact\r\nabout\r\nfaculty\r\ndirectory\r\ndirectory:\r\n", site_group_name )
+    puts search
+    urls = CGI::unescape(urls).split("\r\n") 
+    if urls.count == 1 
+      urls = urls.pop
+    end
+    page_search_array = []
+    regex = /(?:\r\n|\s)/
+    search = search.chomp.split(regex) 
+    puts "************This is the search array************\r\n#{search}"
+    page_search_array << search
+    page_search_array.flatten!
+
+    @site_group = SiteGroup.new(:urls => urls, :name => site_group_name )
+    Anemone.crawl(urls, :discard_page_bodies => true, :dept_limit => 4) do |anemone|
+      anemone.storage = Anemone::Storage.MongoDB
+      #TODO idea = find siteindex first, then find link with params[:search]
+      anemone.on_every_page do |page|
+        page_title = page.doc.at('title').inner_html.chomp.downcase rescue nil 
+        search_results = page_search_array & page_title.split rescue nil
+        puts page_title
+        if page.html? && search_results && !search_results.empty? 
+          url = url.to_s
+          @site_group.pages << Page.new(:url => page.url.to_s, :page_title => page_title)
+          @site_group.save
+          puts "*************/created******** #{@site_group.pages.last}"
+          page.discard_doc!()
+          page_title = nil; body = nil; search_results = nil; 
+          page = nil; email = nil; name = nil; content = nil; content_snippet = nil; 
+        end
+      end
+    end
+  end
 end
 
 class Page
@@ -53,32 +76,6 @@ class Contact
   field :content_snippet
 end
 
-def get_titles(urls)
-  page_search_array = []
-  search_field_input = "board staff", "contact us", "about us", "faculty", "directory", "directory:"
-  page_search_array << search_field_input.join(" ").split
-  page_search_array.flatten!
-
-  site_group = SiteGroup.new(:urls => urls)
-  puts "created #{site_group.urls}"
-  Anemone.crawl(urls, :discard_page_bodies => true, :dept_limit => 4) do |anemone|
-    anemone.storage = Anemone::Storage.MongoDB
-    anemone.on_every_page do |page|
-      page_title = page.doc.at('title').inner_html.chomp.downcase rescue nil 
-      search_results = page_search_array & page_title.split rescue nil
-      puts page_title
-      if page.html? && search_results && !search_results.empty? 
-        url = url.to_s
-        site_group.pages << Page.new(:url => page.url.to_s, :page_title => page_title)
-        site_group.save
-        puts "*************/created******** #{site_group.pages.last}"
-        page.discard_doc!()
-        page_title = nil; body = nil; search_results = nil; 
-        page = nil; email = nil; name = nil; content = nil; content_snippet = nil; 
-      end
-    end
-  end
-end
 
  #page.doc.xpath('//*[starts-with(*, "President")]').each do |node|
  #  contacts = node.parent.text
@@ -94,13 +91,19 @@ end
 
 #new
 get '/' do
+ before do
+    p params[:urls]
+  end
   haml :index
+ 
 end
 
 #create
 post '/' do
-  @site_group = get_titles(params[:urls]) 
-  if @SiteGroup.save
+  count = SiteGroup.count
+  SiteGroup.get_titles(params[:urls], params[:search], params[:site_group_name])
+  @site_group = SiteGroup.last 
+  if SiteGroup.count == count + 1
     redirect "/#{@site_group.id.to_s}"
   else
     redirect '/'
@@ -113,3 +116,20 @@ get '/:id' do
   haml :show
 end
 
+#test
+get '/test/staff.html' do
+  haml '%title staff', :layout => false
+end
+get '/test/faculty.html' do
+  haml '%title faculty', :layout => fals
+end
+get '/test/other.html' do
+  haml '%title other', :layout => false
+end
+post '/google_search' do
+  cx = "003190795339691424418:y8ddzdespag" 
+  lr = "lang_en"
+  q = params[:google_search]
+  get "http://www.googleapis.com/customsearch/v1?key=#{cx}&q=#{q}"
+end
+#http://www.googleapis.com/customsearch/v1?key=130693690549&cx=003190795339691424418:y8ddzdespag&q=site:huc.edu

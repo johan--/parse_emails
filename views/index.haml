@@ -5,7 +5,11 @@
   - if SiteGroup.last
     = SiteGroup.last.urls
 %div.site_group
-  %form
+  %form{ :action => "/", :method => "POST"}
     %p What sites do you want to take a look in?
     %textarea{ :rows => "10", :cols => "20", :name => "urls"}
+    %p What do you want to look for (hit return after each word or phrase)
+    %textarea{ :rows => "10", :cols => "20", :name => "search"}
+    %p And what should this search be called?
+    %input{ :type => "text", :name => "site_group_name"}
     %input{:type => "submit", :value => "Send em into the machine"}
