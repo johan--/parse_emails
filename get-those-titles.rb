@@ -15,7 +15,7 @@ configure :production do
 end
 
 configure :development do
-Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 end
 	 
 class SiteGroup
@@ -24,8 +24,10 @@ class SiteGroup
   field :urls
   field :name
 
-  def self.get_titles( urls, search = "board\r\ncontact\r\nabout\r\nfaculty\r\ndirectory\r\ndirectory:\r\n", site_group_name )
-    puts search
+  def self.get_titles( urls, 
+                       search = "board\r\ncontact\r\nabout\r\nfaculty\r\ndirectory\r\ndirectory:\r\n",
+                       site_group_name )
+    puts "************#{search}****************"
     urls = CGI::unescape(urls).split("\r\n") 
     if urls.count == 1 
       urls = urls.pop
