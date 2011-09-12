@@ -1,0 +1,11 @@
+%p By Golly, It Works!
+%strong Name:
+%p= @site_group.name
+%strong Universal Resource Locator:
+%p= @site_group.urls
+- for page in @site_group.pages
+  %tr
+    %td
+      = page.page_title
+      = page.url
+
