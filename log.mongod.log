@@ -1,0 +1,19 @@
+Thu Sep  8 12:14:21 MongoDB starting : pid=3434 port=27017 dbpath=./data/db 32-bit 
+
+** NOTE: when using MongoDB 32 bit, you are limited to about 2 gigabytes of data
+**       see http://blog.mongodb.org/post/137788967/32-bit-limitations
+
+Thu Sep  8 12:14:21 db version v1.6.3, pdfile version 4.5
+Thu Sep  8 12:14:21 git version: nogitversion
+Thu Sep  8 12:14:21 sys info: Linux vernadsky 2.6.24-27-server #1 SMP Fri Mar 12 01:45:06 UTC 2010 i686 BOOST_LIB_VERSION=1_42
+Thu Sep  8 12:14:21 exception in initAndListen std::exception: boost::filesystem::exists: Permission denied: "./data/db/mongod.lock", terminating
+Thu Sep  8 12:14:21 dbexit: 
+
+Thu Sep  8 12:14:21 shutdown: going to close listening sockets...
+Thu Sep  8 12:14:21 shutdown: going to flush oplog...
+Thu Sep  8 12:14:21 shutdown: going to close sockets...
+Thu Sep  8 12:14:21 shutdown: waiting for fs preallocator...
+Thu Sep  8 12:14:21 shutdown: closing all files...
+Thu Sep  8 12:14:21     closeAllFiles() finished
+
+Thu Sep  8 12:14:21 dbexit: really exiting now
