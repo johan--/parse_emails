@@ -9,9 +9,16 @@ require 'thin'
 #templating
 require 'haml'
 
+#configure :production do
+#  uri  = URI.parse(ENV['MONGOLAB_URI'])
+#  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
+#end
+
 configure :production do
   uri  = URI.parse(ENV['MONGOLAB_URI'])
-  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
+  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
+  db = conn.db(uri.path.gsub(/^\//, ''))
+  Mongoid.database = db
 end
 
 configure :development do
