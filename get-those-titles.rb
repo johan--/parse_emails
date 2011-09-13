@@ -106,7 +106,7 @@ post '/' do
   SiteGroup.get_titles(params[:urls], params[:search], params[:site_group_name])
   @site_group = SiteGroup.last 
   if SiteGroup.count == count + 1
-    redirect "/#{@site_group.id.to_s}"
+    redirect "/#{@site_group.id}"
   else
     redirect '/'
   end
