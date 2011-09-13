@@ -27,14 +27,15 @@ Mongoid.configure do |config|
     if ENV['MONGOLAB_URI']
         uri = URI.parse(ENV['MONGOLAB_URI'])
         host = uri.host
-        db = uri.path.gsub(/^\//, ' '))
+        db = uri.path.gsub(/^\//, ' ')
         userinfo = uri.userinfo
 
         conn = Mongo::Connection.new(uri.scheme+"://"userinfo+host, port) 
         config.database = conn.db(db)
     else
         config.database = Mongo::Connection.from_uri(
-          "mongodb://localhost:27017").db('test')
+          "mongodb://localhost:27017").db('test'
+        )
     end
 end
 
