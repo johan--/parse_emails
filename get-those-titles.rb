@@ -21,9 +21,9 @@ configure :production do
   Mongoid.database = db
 end
 
-configure :development do
-  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
-end
+#configure :development do
+#  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+#end
 	 
 class SiteGroup
   include Mongoid::Document
