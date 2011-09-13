@@ -13,20 +13,18 @@ require 'haml'
 #  uri  = URI.parse(ENV['MONGOLAB_URI'])
 #  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
 #end
-puts ENV['MONGOLAB_URI']
-puts "*********************************************"
-puts URI.parse(ENV['MONGOLAB_URI'])
+#puts URI.parse(ENV['MONGOLAB_URI'])
 
 configure :production do
-  uri  = URI.parse(ENV['MONGOLAB_URI'])
+  #uri  = URI.parse(ENV['MONGOLAB_URI'])
   conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-  db = conn.db(uri.path.gsub(/^\//, ''))
+  db = conn.db  #(uri.path.gsub(/^\//, ''))
   Mongoid.database = db
 end
 
-#configure :development do
-#  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
-#end
+configure :development do
+  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+end
 	 
 class SiteGroup
   include Mongoid::Document
@@ -112,6 +110,10 @@ end
 
 #create
 post '/' do
+  puts "********************************************"
+  puts ENV['MONGOLAB_URI']
+  puts "*********************************************"
+
   count = SiteGroup.count
   SiteGroup.get_titles(params[:urls], params[:search], params[:site_group_name])
   @site_group = SiteGroup.last 
