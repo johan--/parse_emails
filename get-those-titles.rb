@@ -17,7 +17,7 @@ puts ENV['MONGOLAB_URI']
 puts "*********************************************"
 puts URI.parse(ENV['MONGOLAB_URI']
 
-configure :production do
+configure do
   uri  = URI.parse(ENV['MONGOLAB_URI'])
   conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
   db = conn.db(uri.path.gsub(/^\//, ''))
