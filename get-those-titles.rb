@@ -13,6 +13,9 @@ require 'haml'
 #  uri  = URI.parse(ENV['MONGOLAB_URI'])
 #  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
 #end
+puts ENV['MONGOLAB_URI']
+puts "*********************************************"
+puts URI.parse(ENV['MONGOLAB_URI']
 
 configure :production do
   uri  = URI.parse(ENV['MONGOLAB_URI'])
