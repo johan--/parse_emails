@@ -15,14 +15,23 @@ require 'haml'
 #end
 #puts URI.parse(ENV['MONGOLAB_URI'])
 
-configure :production do
-  #Mongoid::Config::Database.new( 
-  #  false, "uri" => { "mongodb://heroku_app953488:aav83dcjbnk1372nmnqdrkppu@dbh43.mongolab.com:27437/heroku_app953488" }
-  #)
-  uri  = URI.parse(ENV['MONGOLAB_URI'])
-  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-  db = conn.db(uri.path.gsub(/^\//, ''))
-  Mongoid.database = db
+#configure :production do
+#  uri  = URI.parse(ENV['MONGOLAB_URI'])
+#  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
+#  db = conn.db(uri.path.gsub(/^\//, ''))
+#  Mongoid.database = db
+#end
+#
+#from sinatra-mongoid-app
+Mongoid.configure do |config|
+    if ENV['MONGOLAB_URI']
+        conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
+        uri = URI.parse(ENV['MONGOLAB_URI'])
+        config.master = conn.db(uri.path.gsub(/^\//, ''))
+    else
+        config.master = Mongo::Connection.from_uri(
+          "mongodb://localhost:27017").db('test')
+    end
 end
 
 configure :development do
