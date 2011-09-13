@@ -16,14 +16,16 @@ require 'haml'
 #puts URI.parse(ENV['MONGOLAB_URI'])
 
 configure :production do
-  uri  = URI.parse(ENV['MONGOLAB_URI'])
-  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-  db = conn.db(uri.path.gsub(/^\//, ''))
-  Mongoid.database = db
+  Mongoid::Config::Database.new( false,
+                                "uri" => {  ENV['MONGOLAB_URI']  }
+  #uri  = URI.parse(ENV['MONGOLAB_URI'])
+  #conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
+  #db = conn.db(uri.path.gsub(/^\//, ''))
+  #Mongoid.database = db
 end
 
 configure :development do
-  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+  #Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 end
 	 
 class SiteGroup
