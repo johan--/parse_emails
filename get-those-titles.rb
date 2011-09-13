@@ -25,9 +25,13 @@ require 'haml'
 #from sinatra-mongoid-app
 Mongoid.configure do |config|
     if ENV['MONGOLAB_URI']
-        conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
         uri = URI.parse(ENV['MONGOLAB_URI'])
-        config.database = conn.db(uri.path.gsub(/^\//, ''))
+        host = uri.host
+        db = uri.path.gsub(/^\//, ' '))
+        userinfo = uri.userinfo
+
+        conn = Mongo::Connection.new(uri.scheme+"://"userinfo+host, port) 
+        config.database = conn.db(db)
     else
         config.database = Mongo::Connection.from_uri(
           "mongodb://localhost:27017").db('test')
