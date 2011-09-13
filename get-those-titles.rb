@@ -16,17 +16,17 @@ require 'haml'
 #puts URI.parse(ENV['MONGOLAB_URI'])
 
 configure :production do
-  Mongoid::Config::Database.new( 
-    false, "uri" => {  "mongodb://heroku_app953488:aav83dcjbnk1372nmnqdrkppu@dbh43.mongolab.com:27437/heroku_app953488"  }
-  )
-  #uri  = URI.parse(ENV['MONGOLAB_URI'])
-  #conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-  #db = conn.db(uri.path.gsub(/^\//, ''))
-  #Mongoid.database = db
+  #Mongoid::Config::Database.new( 
+  #  false, "uri" => { "mongodb://heroku_app953488:aav83dcjbnk1372nmnqdrkppu@dbh43.mongolab.com:27437/heroku_app953488" }
+  #)
+  uri  = URI.parse(ENV['MONGOLAB_URI'])
+  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
+  db = conn.db(uri.path.gsub(/^\//, ''), uri.port)
+  Mongoid.database = db
 end
 
 configure :development do
-  #Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
+  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 end
 	 
 class SiteGroup
