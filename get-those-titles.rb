@@ -22,7 +22,7 @@ configure :production do
   uri  = URI.parse(ENV['MONGOLAB_URI'])
   conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
   db = conn.db(uri.path.gsub(/^\//, ''))
-  #Mongoid.database = db
+  Mongoid.database = db
 end
 
 configure :development do
