@@ -17,7 +17,7 @@ require 'haml'
 
 configure :production do
   Mongoid::Config::Database.new( 
-    false, "uri" => {  ENV['MONGOLAB_URI']  }
+    false, "uri" => {  "mongodb://heroku_app953488:aav83dcjbnk1372nmnqdrkppu@dbh43.mongolab.com:27437/heroku_app953488"  }
   )
   #uri  = URI.parse(ENV['MONGOLAB_URI'])
   #conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
