@@ -30,7 +30,7 @@ Mongoid.configure do |config|
         db = uri.path.gsub(/^\//, ' ')
         userinfo = uri.userinfo
 
-        conn = Mongo::Connection.new(uri.scheme+"://"userinfo+host, port) 
+        conn = Mongo::Connection.new(uri.scheme + "://" + userinfo + host, port) 
         config.database = conn.db(db)
     else
         config.database = Mongo::Connection.from_uri(
