@@ -15,14 +15,14 @@ require 'haml'
 #end
 puts ENV['MONGOLAB_URI']
 puts "*********************************************"
-puts URI.parse(ENV['MONGOLAB_URI']
+puts URI.parse(ENV['MONGOLAB_URI'])
 
-#configure do
-#  uri  = URI.parse(ENV['MONGOLAB_URI'])
-#  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-#  db = conn.db(uri.path.gsub(/^\//, ''))
-#  Mongoid.database = db
-#end
+configure :production do
+  uri  = URI.parse(ENV['MONGOLAB_URI'])
+  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
+  db = conn.db(uri.path.gsub(/^\//, ''))
+  Mongoid.database = db
+end
 
 #configure :development do
 #  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
