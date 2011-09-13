@@ -27,6 +27,7 @@ Mongoid.configure do |config|
     if ENV['MONGOLAB_URI']
         uri = URI.parse(ENV['MONGOLAB_URI'])
         host = uri.host
+        port = uri.port
         db = uri.path.gsub(/^\//, ' ')
         userinfo = uri.userinfo
 
