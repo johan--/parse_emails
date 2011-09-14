@@ -23,28 +23,30 @@ require 'haml'
 #end
 #
 #from sinatra-mongoid-app
-Mongoid.configure do |config|
-    if ENV['MONGOLAB_URI']
-        uri = URI.parse(ENV['MONGOLAB_URI'])
-        host = uri.host
-        port = uri.port.to_i
-        db = uri.path.gsub(/^\//, '')
-        userinfo = uri.userinfo
-
-        conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
-        config.master  = conn.db(db)
-    else
-        port = '27017'
-        config.database = Mongo::Connection.from_uri(
-          "mongodb://localhost:27017").db('test'
-        )
-    end
-end
+#Mongoid.configure do |config|
+#    if ENV['MONGOLAB_URI']
+#        uri = URI.parse(ENV['MONGOLAB_URI'])
+#        host = uri.host
+#        port = uri.port.to_i
+#        db = uri.path.gsub(/^\//, '')
+#        userinfo = uri.userinfo
+#
+#        conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
+#        config.master  = conn.db(db)
+#    else
+#        port = '27017'
+#        config.database = Mongo::Connection.from_uri(
+#          "mongodb://localhost:27017"
+#        ).db('test')
+#    end
+#end
 
 #configure :development do
 #  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 #end
-	 
+
+Mongoid.load!("config/mongoid.yml")
+
 class SiteGroup
   include Mongoid::Document
   embeds_many :pages
