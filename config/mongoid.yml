@@ -9,17 +9,21 @@ test:
 
 # set these environment variables on your prod server
 production:
+  <% if ENV['MONGOLAB_URI'] %>
   <% uri = URI.parse(ENV['MONGOLAB_URI']) %>
-  <%= host = uri.host %>
-  <%= port = uri.port %>
-  <%= username = uri.user %>
-  <%= password = uri.password %>
-  <%= database: uri.path.gsub(/^\//, '') %>
+  <% host = uri.host %>
+  <% port = uri.port %>
+  <% username = uri.user %>
+  <% password = uri.password %>
+  <% database = uri.path.gsub(/^\//, '') %>
   #uri: <%= ENV['MONGOLAB_URI'] %>
-  #port: <%= URI.parse(ENV['MONGOLAB_URI']).port %>
-  #username: <%= ENV['MONGOID_USERNAME'] %>
-  #password: <%= ENV['MONGOID_PASSWORD'] %>
-  #database: <%= ENV['MONGOID_DATABASE'] %>
+  host: <%= host %>
+  port: <%= port %>
+  username: <%= username %> 
+  password: <%= password %> 
+  database: <%= database %> 
+  
+  <% end %>
   # slaves:
   #   - host: slave1.local
   #     port: 27018
