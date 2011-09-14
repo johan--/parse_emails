@@ -9,40 +9,24 @@ require 'thin'
 #templating
 require 'haml'
 
-#configure :production do
-#  uri  = URI.parse(ENV['MONGOLAB_URI'])
-#  Mongoid.database = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']).db(uri.path.gsub(/^\//, ''))
+#simpleworker
+#development `ENV['SIMPLE_WORKER_ACCESS_KEY'] = 'YOUR ACCESS KEY'
+#             ENV['SIMPLE_WORKER_SECRET_KEY'] = 'YOUR SECRET KEY'
+#config simplworker
+#SimpleWorker.configure do |config|
+#  config.access_key = ENV['SIMPLE_WORKER_ACCESS_KEY']
+#  config.secret_key = ENV['SIMPLE_WORKER_SECRET_KEY']
+#      # Use the line below if you're using an ActiveRecord database
+#  config.database = Rails.configuration.database_configuration[Rails.env]
 #end
-#puts URI.parse(ENV['MONGOLAB_URI'])
+
+#or delayed_job
+#http://devcenter.heroku.com/articles/delayed-job
 
 #configure :production do
-#  uri  = URI.parse(ENV['MONGOLAB_URI'])
-#  conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI'])
-#  db = conn.db(uri.path.gsub(/^\//, ''))
-#  Mongoid.database = db
-#end
-#
-#from sinatra-mongoid-app
-#Mongoid.configure do |config|
-#    if ENV['MONGOLAB_URI']
-#        uri = URI.parse(ENV['MONGOLAB_URI'])
-#        host = uri.host
-#        port = uri.port.to_i
-#        db = uri.path.gsub(/^\//, '')
-#        userinfo = uri.userinfo
-#
-#        conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
-#        config.master  = conn.db(db)
-#    else
-#        port = '27017'
-#        config.database = Mongo::Connection.from_uri(
-#          "mongodb://localhost:27017"
-#        ).db('test')
-#    end
 #end
 
 #configure :development do
-#  Mongoid.database = Mongo::Connection.new('localhost','27017').db('parse_emails')
 #end
 
 Mongoid.load!("config/mongoid.yml")
@@ -163,7 +147,16 @@ end
 get '/test/other.html' do
   haml '%title other', :layout => false
 end
+
+require 'google/api_client'
+client = Google::APIClient.new
+cse = client.discovered_api('cse')
+response = client.execute(
+  
+)
+
 post '/google_search' do
+  key = 'H6VghcN7nF2KjEAqhH-y1T2_' #https://code.google.com/apis/console
   cx = "003190795339691424418:y8ddzdespag" 
   lr = "lang_en"
   q = params[:google_search]
