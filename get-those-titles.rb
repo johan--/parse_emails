@@ -28,7 +28,7 @@ Mongoid.configure do |config|
         uri = URI.parse(ENV['MONGOLAB_URI'])
         host = uri.host
         port = uri.port
-        db = uri.path.gsub(/^\//, ' ')
+        db = uri.path.gsub(/^\//, '')
         userinfo = uri.userinfo
 
         conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
