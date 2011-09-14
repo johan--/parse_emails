@@ -32,7 +32,7 @@ Mongoid.configure do |config|
         userinfo = uri.userinfo
 
         conn = Mongo::Connection.from_uri(ENV['MONGOLAB_URI']) 
-        config.master  = conn.db(db, port)
+        config.master  = conn.db(db)
     else
         port = '27017'
         config.database = Mongo::Connection.from_uri(
