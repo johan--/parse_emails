@@ -70,7 +70,9 @@ class SiteGroup
 
     @site_group = SiteGroup.new(:urls => urls, :name => site_group_name )
     Anemone.crawl(urls, :discard_page_bodies => true, :dept_limit => 4) do |anemone|
-      anemone.storage = Anemone::Storage.MongoDB
+      unless ENV['MONGOLAB_URI']
+        anemone.storage = Anemone::Storage.MongoDB
+      end
       #TODO idea = find siteindex first, then find link with params[:search]
       anemone.on_every_page do |page|
         page_title = page.doc.at('title').inner_html.chomp.downcase rescue nil 
