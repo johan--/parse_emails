@@ -10,7 +10,7 @@ test:
 # set these environment variables on your prod server
 production:
   uri: <%= ENV['MONGOLAB_URI'] %>
-  #port: <%= ENV['MONGOID_PORT'] %>
+  port: <%= URI.parse(ENV['MONGOLAB_URI']).port %>
   #username: <%= ENV['MONGOID_USERNAME'] %>
   #password: <%= ENV['MONGOID_PASSWORD'] %>
   #database: <%= ENV['MONGOID_DATABASE'] %>
