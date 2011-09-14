@@ -93,7 +93,7 @@ DEPENDENCIES
   heroku
   interactive_editor
   mongo
-  mongoid
+  mongoid (>= 2.2.0)
   pry
   sinatra
   sinatra-reloader

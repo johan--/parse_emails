@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 gem 'anemone'
-gem 'mongoid'
+gem "mongoid", ">= 2.2.0"
 gem 'bson_ext', '~> 1.3'
 gem 'mongo'
 
