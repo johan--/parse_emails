@@ -9,7 +9,7 @@ gem 'thin'
 
 gem 'haml'
 
-gem 'google-api-client'
+gem 'rbing'
 
 group :development do
   gem "sinatra-reloader"

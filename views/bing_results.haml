@@ -1,0 +1,11 @@
+%div.bing_search_results
+  %h1 Nothing was saved, but here's what Bing found:
+  - for result in @results
+    %div.result_group
+      %form{ :action => "/", :method => "POST" }
+        %strong Contacts
+      %h2= result.title
+      %h3
+        %a{ :href => result.url, :target => "_blank" }
+          =result.DisplayUrl
+      %p= result.description

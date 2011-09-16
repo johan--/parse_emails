@@ -1,14 +1,10 @@
-options: &options
-  parameterize_keys: false
-
-defaults: &defaults
-  host: localhost
-  
 development:
-  <<: *defaults
-  <<: *options
-  database: get_those_development
-
+  host: localhost
+  database: get_those_titles_development
+  port: 27017
+test:
+  host: localhost
+  database: get_those_titles_test
 production:
   <% if ENV['MONGOLAB_URI'] %>
   <% uri = URI.parse(ENV['MONGOLAB_URI']) %>
@@ -23,4 +19,3 @@ production:
   password: <%= password %> 
   database: <%= database %> 
   <% end %>
-    

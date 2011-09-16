@@ -13,3 +13,13 @@
     %p And what should this search be called?
     %input{ :type => "text", :name => "site_group_name"}
     %input{:type => "submit", :value => "Send em into the machine"}
+%div.bing_search
+  %form{ :action => "/", :method => "POST"}
+    %p What sites do you want to search with Microsoft's Bing
+    %textarea{ :rows => "10", :cols => "20", :name => "urls"}
+    %p What do you want to look for? (hit return after each word or phrase)
+    %textarea{ :rows => "10", :cols => "20", :name => "bing_search"}
+    %p What's the name of this search?
+    %input{ :type => "text", :name => "site_group_name"}
+    %input{ :type => "submit", :value => "Search with Bing"}
+

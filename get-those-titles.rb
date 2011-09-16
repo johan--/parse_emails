@@ -6,6 +6,8 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'thin'
 
+require 'rbing'
+
 #templating
 require 'haml'
 
@@ -26,8 +28,11 @@ require 'haml'
 #configure :production do
 #end
 
-#configure :development do
-#end
+configure :development do
+  Mongoid.configure do |config|
+      config.master = Mongo::Connection.new.db("get_those_development")
+  end
+end
 
 Mongoid.load!("config/mongoid.yml")
 
@@ -81,7 +86,9 @@ class Page
   embedded_in :site_group
   embeds_many :contacts
   field :url
+  field :display_url
   field :page_title
+  field :description
 end
 
 class Contact
@@ -90,7 +97,6 @@ class Contact
   field :email
   field :name
   field :content
-  field :content_snippet
 end
 
 
@@ -117,25 +123,69 @@ end
 
 #create
 post '/' do
-  puts "********************************************"
-  puts ENV['MONGOLAB_URI']
-  puts "*********************************************"
-
   count = SiteGroup.count
-  SiteGroup.get_titles(params[:urls], params[:search], params[:site_group_name])
-  @site_group = SiteGroup.last 
-  if SiteGroup.count == count + 1
-    redirect "/#{@site_group.id}"
+  
+  if params[:bing_search]
+    bing = RBing.new("66BB92727C57435B4A611134F4C8530A2F62B362")
+    bing_results = bing.web(params[:bing_search], :site => params[:urls])
+    @bing_results = bing_results
+    @site_group = SiteGroup.new( :name => params[:name], 
+                                 :urls => params[:urls]
+                               )
+    for result in bing_results.web.results
+      @site_group.pages << Page.new( :page_title => result.title, 
+                                      :url => result.url,
+                                      :description => result.description,
+                                      :display_url => result.displayUrl
+                                    )
+      @site_group.save
+    end
+    @@results = @bing_results.web.results
   else
-    redirect '/'
+    SiteGroup.get_titles(
+      params[:urls], params[:search], params[:site_group_name]
+    )
+  end
+
+  @site_group = SiteGroup.last 
+
+  if SiteGroup.count == count + 1
+    redirect "/site_groups/#{@site_group.id}"
+  else
+    redirect "/bing_results"
   end
 end
 
+post "/site_groups/:id/contacts/update" do
+  puts "****************************#{params.inspect}"
+  @site_group = SiteGroup.find(params[:id])
+  @page = @site_group.pages.find_or_initialize_by( 
+                                                  :url => params[:url].to_s
+                                                 ) 
+  @page.Contact.new( 
+                                  :email => params[:email],
+                                  :name => params[:name],
+                                  :content => params[:content]
+                                )
+  if @site_group.save
+    redirect "/site_groups/#{@site_group.id}"
+  end
+end
+  
+
 #show
-get '/:id' do
+get '/bing_results' do
+  @results = @@results
+  haml :bing_results
+end
+
+get '/site_groups/:id' do
+  puts "*************************************" 
+  p params.inspect
   @site_group = SiteGroup.find(params[:id])
   haml :show
 end
+
 
 #test
 get '/test/staff.html' do
@@ -148,18 +198,5 @@ get '/test/other.html' do
   haml '%title other', :layout => false
 end
 
-require 'google/api_client'
-client = Google::APIClient.new
-cse = client.discovered_api('cse')
-response = client.execute(
-  
-)
 
-post '/google_search' do
-  key = 'H6VghcN7nF2KjEAqhH-y1T2_' #https://code.google.com/apis/console
-  cx = "003190795339691424418:y8ddzdespag" 
-  lr = "lang_en"
-  q = params[:google_search]
-  get "http://www.googleapis.com/customsearch/v1?key=#{cx}&q=#{q}"
-end
-#http://www.googleapis.com/customsearch/v1?key=130693690549&cx=003190795339691424418:y8ddzdespag&q=site:huc.edu
+

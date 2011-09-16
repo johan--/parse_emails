@@ -1,11 +1,23 @@
 %p By Golly, It Works!
 %strong Name:
 %p= @site_group.name
-%strong Universal Resource Locator:
+%strong URLs:
 %p= @site_group.urls
-- for page in @site_group.pages
-  %tr
-    %td
-      = page.page_title
-      = page.url
-
+%div.saved_bing_search_results
+  - for page in @site_group.pages
+    %div.result_group
+      %form{ :action => "/site_groups/#{@site_group.id}/contacts/update",
+             :method => "POST" }
+        %h4 
+          Contacts
+          - for contact in page.contacts
+            %strong= contact.email 
+          %input{ :type => "hidden", :name => page.url }
+          %input{ :type => "text", :name => "email" }
+          %input{ :type => "submit", :value => "Save contact" }
+          
+      %h2= page.page_title
+      %h3
+        %a{ :href => page.url, :target => "_blank" }
+          =page.display_url
+      %p= page.description
