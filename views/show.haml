@@ -11,7 +11,8 @@
         %h4 
           Contacts
           - for contact in page.contacts
-            %strong= contact.email 
+            %strong= contact.email
+            , 
           %input{ :type => "hidden", :name => page.url }
           %input{ :type => "text", :name => "email" }
           %input{ :type => "submit", :value => "Save contact" }

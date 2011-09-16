@@ -162,14 +162,14 @@ post "/site_groups/:id/contacts/update" do
   @page = @site_group.pages.find_or_initialize_by( 
                                                   :url => params[:url].to_s
                                                  ) 
-  @page.Contact.new( 
+  @page.contacts.new( 
                                   :email => params[:email],
                                   :name => params[:name],
                                   :content => params[:content]
                                 )
-  if @site_group.save
+  @site_group.save
     redirect "/site_groups/#{@site_group.id}"
-  end
+  
 end
   
 
