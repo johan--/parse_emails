@@ -1,5 +1,12 @@
 - for page in @site_group.pages
   - for contact in page.contacts
-    %strong= contact.email
-    %p= contact.name
-    %p= contact.content
+    %dl
+      %dd 
+        Email:
+        = contact.email
+      %dl 
+        Name:
+        =contact.name
+      %dl
+        Notes:
+        = contact.content
