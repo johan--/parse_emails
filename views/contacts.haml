@@ -1,3 +1,4 @@
+%h2= @site_group.name
 - for page in @site_group.pages
   - for contact in page.contacts
     %dl
@@ -10,3 +11,5 @@
       %dl
         Notes:
         = contact.content
+#TODO: update action for contacts
+#Todo: destroy action for contacts

@@ -6,6 +6,8 @@
     - for site_group in SiteGroup.limit(10)
       %p
         %a{:href => "/site_groups/#{site_group.id}/contacts"}
+          - if site_group.name
+            = "#{site_group.name}  |  "
           =site_group.urls
   - if SiteGroup.count > 10
     %p
@@ -20,6 +22,7 @@
     %p What's the name of this search?
     %input{ :type => "text", :name => "site_group_name"}
     %input{ :type => "submit", :value => "Search with Bing"}
+#TODO: two buttons, one form
 %div.site_group
   %h4 Real-time Search (could take a minute or two)
   %form{ :action => "/", :method => "POST"}

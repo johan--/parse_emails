@@ -129,7 +129,7 @@ post '/' do
     bing = RBing.new("66BB92727C57435B4A611134F4C8530A2F62B362")
     bing_results = bing.web(params[:bing_search], :site => params[:urls])
     @bing_results = bing_results
-    @site_group = SiteGroup.new( :name => params[:name], 
+    @site_group = SiteGroup.new( :name => params[:site_group_name], 
                                  :urls => params[:urls]
                                )
     for result in bing_results.web.results
