@@ -1,15 +1,19 @@
 %strong Welcome to the title finder.
 %p
-  This is a list of urls that were searched:
+  Previous Searches:
   %br
   - if SiteGroup.first
-    - for site_group in SiteGroup.all
+    - for site_group in SiteGroup.limit(10)
       %p
         %a{:href => "/site_groups/#{site_group.id}/contacts"}
           =site_group.urls
+  - if SiteGroup.count > 10
+    %p
+      %a{:href => "/site_groups/" }
+        See all previous searches
 %div.bing_search
   %form{ :action => "/", :method => "POST"}
-    %p What sites do you want to search with Microsoft's Bing
+    %p What sites do you want to search with Microsoft's Bing?
     %textarea{ :rows => "10", :cols => "20", :name => "urls"}
     %p What do you want to look for? (hit return after each word or phrase)
     %textarea{ :rows => "10", :cols => "20", :name => "bing_search"}
@@ -17,12 +21,13 @@
     %input{ :type => "text", :name => "site_group_name"}
     %input{ :type => "submit", :value => "Search with Bing"}
 %div.site_group
+  %h4 Real-time Search (could take a minute or two)
   %form{ :action => "/", :method => "POST"}
     %p What sites do you want to take a look in?
     %textarea{ :rows => "10", :cols => "20", :name => "urls"}
-    %p What do you want to look for (hit return after each word or phrase)
+    %p What do you want to look for? (hit return after each word or phrase)
     %textarea{ :rows => "10", :cols => "20", :name => "search"}
-    %p And what should this search be called?
+    %p What's the name of this search?
     %input{ :type => "text", :name => "site_group_name"}
     %input{:type => "submit", :value => "Send em into the machine"}
 

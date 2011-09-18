@@ -178,6 +178,10 @@ get '/bing_results' do
   haml :bing_results
 end
 
+get '/site_groups/index' do
+  haml :site_groups
+end
+
 get '/site_groups/:id' do
   puts "*************************************" 
   p params.inspect
