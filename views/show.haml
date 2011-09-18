@@ -1,20 +1,27 @@
 %p By Golly, It Works!
 %strong Name:
+%p
+  %a{ :href => "/site_groups/#{@site_group.id}/contacts" }List of contacts
 %p= @site_group.name
 %strong URLs:
 %p= @site_group.urls
 %div.saved_bing_search_results
   - for page in @site_group.pages
     %div.result_group
-      %form{ :action => "/site_groups/#{@site_group.id}/contacts/update",
+      %h4 
+        Contacts:
+        - for contact in page.contacts
+          %strong= "#{contact.email}, #{contact.name}, #{contact.content} "
+          %br
+        %form{ :action => "/site_groups/#{@site_group.id}/contacts/update",
              :method => "POST" }
-        %h4 
-          Contacts
-          - for contact in page.contacts
-            %strong= contact.email
-            , 
-          %input{ :type => "hidden", :name => page.url }
+          %input{ :type => "hidden", :name => "url", :value => page.url }
+          Email:
           %input{ :type => "text", :name => "email" }
+          Name:
+          %input{ :type => "text", :name => "name" }
+          Notes:
+          %input{ :type => "text", :name => "content" }
           %input{ :type => "submit", :value => "Save contact" }
           
       %h2= page.page_title
@@ -22,3 +29,4 @@
         %a{ :href => page.url, :target => "_blank" }
           =page.display_url
       %p= page.description
+#TODO: change hidden input for page to an index on contacts input. pages[:index]

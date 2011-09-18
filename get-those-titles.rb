@@ -160,7 +160,7 @@ post "/site_groups/:id/contacts/update" do
   puts "****************************#{params.inspect}"
   @site_group = SiteGroup.find(params[:id])
   @page = @site_group.pages.find_or_initialize_by( 
-                                                  :url => params[:url].to_s
+                                                  :url => params[:url]
                                                  ) 
   @page.contacts.new( 
                                   :email => params[:email],
@@ -168,8 +168,7 @@ post "/site_groups/:id/contacts/update" do
                                   :content => params[:content]
                                 )
   @site_group.save
-    redirect "/site_groups/#{@site_group.id}"
-  
+  redirect "/site_groups/#{@site_group.id}"
 end
   
 
@@ -184,6 +183,11 @@ get '/site_groups/:id' do
   p params.inspect
   @site_group = SiteGroup.find(params[:id])
   haml :show
+end
+
+get '/site_groups/:id/contacts' do
+  @site_group = SiteGroup.find(params[:id])
+  haml :contacts
 end
 
 

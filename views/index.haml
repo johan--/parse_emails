@@ -2,17 +2,11 @@
 %p
   This is a list of urls that were searched:
   %br
-  - if SiteGroup.last
-    = SiteGroup.last.urls
-%div.site_group
-  %form{ :action => "/", :method => "POST"}
-    %p What sites do you want to take a look in?
-    %textarea{ :rows => "10", :cols => "20", :name => "urls"}
-    %p What do you want to look for (hit return after each word or phrase)
-    %textarea{ :rows => "10", :cols => "20", :name => "search"}
-    %p And what should this search be called?
-    %input{ :type => "text", :name => "site_group_name"}
-    %input{:type => "submit", :value => "Send em into the machine"}
+  - if SiteGroup.first
+    - for site_group in SiteGroup.all
+      %p
+        %a{:href => "/site_groups/#{site_group.id}/contacts"}
+          =site_group.urls
 %div.bing_search
   %form{ :action => "/", :method => "POST"}
     %p What sites do you want to search with Microsoft's Bing
@@ -22,4 +16,13 @@
     %p What's the name of this search?
     %input{ :type => "text", :name => "site_group_name"}
     %input{ :type => "submit", :value => "Search with Bing"}
+%div.site_group
+  %form{ :action => "/", :method => "POST"}
+    %p What sites do you want to take a look in?
+    %textarea{ :rows => "10", :cols => "20", :name => "urls"}
+    %p What do you want to look for (hit return after each word or phrase)
+    %textarea{ :rows => "10", :cols => "20", :name => "search"}
+    %p And what should this search be called?
+    %input{ :type => "text", :name => "site_group_name"}
+    %input{:type => "submit", :value => "Send em into the machine"}
 
